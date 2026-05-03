@@ -22,8 +22,8 @@ if [ "$(id -g node)" -ne "$PGID" ]; then
     changed=1
 fi
 
-if [ "$changed" = "1" ]; then
-    chown -R node:node /paperclip
-fi
+# Always ensure /paperclip is owned by node, regardless of UID/GID changes
+# This handles cases where the volume has wrong permissions from previous runs
+chown -R node:node /paperclip
 
 exec gosu node "$@"
